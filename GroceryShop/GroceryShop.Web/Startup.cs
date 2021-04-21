@@ -1,6 +1,7 @@
 namespace GroceryShop.Web
 {
     using GroceryShop.Data;
+    using GroceryShop.Data.Seeding;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.HttpsPolicy;
@@ -47,6 +48,8 @@ namespace GroceryShop.Web
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                 dbContext.Database.Migrate();
+
+                new ApplicationDbContextSeeder().SeedAsync(dbContext).GetAwaiter().GetResult();
             }
 
             if (env.IsDevelopment())

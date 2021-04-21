@@ -4,7 +4,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-    public class ProductReceiptConfiguration : IEntityTypeConfiguration<ProductReceipt>
+    internal class ProductReceiptConfiguration : IEntityTypeConfiguration<ProductReceipt>
     {
         public void Configure(EntityTypeBuilder<ProductReceipt> builder)
         {

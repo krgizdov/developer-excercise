@@ -4,7 +4,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-    class ProductDealConfiguration : IEntityTypeConfiguration<ProductDeal>
+    internal class ProductDealConfiguration : IEntityTypeConfiguration<ProductDeal>
     {
         public void Configure(EntityTypeBuilder<ProductDeal> builder)
         {

@@ -21,11 +21,6 @@
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductViewModel>>> GetProducts(int count = 10)
         {
-            if (count <= 0 || count > 50)
-            {
-                return this.BadRequest();
-            }
-
             var productViews = await this.productsService.GetAllAsync<ProductViewModel>(count);
 
             return this.Ok(productViews);
@@ -37,11 +32,6 @@
         {
             var productView = await this.productsService.GetByIdAsync<ProductViewModel>(id);
 
-            if (productView == null)
-            {
-                return this.NotFound();
-            }
-
             return this.Ok(productView);
         }
 
@@ -49,39 +39,15 @@
         [HttpPost]
         public async Task<ActionResult<IEnumerable<ProductViewModel>>> PostProducts(ProductCreateInputModel[] inputModels)
         {
-            if (inputModels.Length == 0)
-            {
-                return this.BadRequest();
-            }
+            var productViews = await this.productsService.CreateAsync(inputModels);
 
-            var productViewModels = new List<ProductViewModel>();
-
-            foreach (var input in inputModels)
-            {
-                var productId = await this.productsService.CreateAsync(input.Name, input.Price);
-
-                productViewModels.Add(new ProductViewModel
-                {
-                    Id = productId,
-                    Name = input.Name,
-                    Price = input.Price,
-                });
-            }
-
-            return this.CreatedAtAction("GetProducts", productViewModels);
+            return this.CreatedAtAction("GetProducts", productViews);
         }
 
         // PUT api/products/{id}
         [HttpPut("{id}")]
         public async Task<ActionResult> PutProduct(int id, ProductUpdateModel updateModel)
         {
-            var product = await this.productsService.GetByIdAsync<ProductViewModel>(id);
-
-            if (product == null)
-            {
-                return this.NotFound();
-            }
-
             await this.productsService.UpdateAsync(id, updateModel.Name, updateModel.Price);
 
             return this.NoContent();
@@ -91,13 +57,6 @@
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteProduct(int id)
         {
-            var product = await this.productsService.GetByIdAsync<ProductViewModel>(id);
-
-            if (product == null)
-            {
-                return this.NotFound();
-            }
-
             await this.productsService.DeleteAsync(id);
 
             return this.NoContent();

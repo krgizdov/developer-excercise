@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GroceryShop.Common\GroceryShop.Common.csproj" />
     <ProjectReference Include="..\GroceryShop.Data.Models\GroceryShop.Data.Models.csproj" />
   </ItemGroup>
 

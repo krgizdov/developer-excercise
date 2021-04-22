@@ -1,26 +1,21 @@
 namespace GroceryShop.Web
 {
+    using GroceryShop.Common;
     using GroceryShop.Data;
     using GroceryShop.Data.Common.Repositories;
     using GroceryShop.Data.Repositories;
     using GroceryShop.Data.Seeding;
     using GroceryShop.Services.Data;
     using GroceryShop.Services.Mapping;
+    using GroceryShop.Web.Infrastructure;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.HttpsPolicy;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
     using Microsoft.OpenApi.Models;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Reflection;
-    using System.Threading.Tasks;
 
     public class Startup
     {
@@ -35,7 +30,7 @@ namespace GroceryShop.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(
-                options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
+                options => options.UseSqlServer(this.configuration.GetConnectionString(GlobalConstants.DefaultConnection)));
 
             services.AddControllers();
 
@@ -52,12 +47,13 @@ namespace GroceryShop.Web
 
             // Application services
             services.AddTransient<IProductsService, ProductsService>();
+            services.AddTransient<IDealsService, DealsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            AutoMapperConfig.RegisterMappings(Assembly.Load("GroceryShop.Web.ViewModels"));
+            AutoMapperConfig.RegisterMappings(Assembly.Load(GlobalConstants.AutoMapperAssemblyName));
 
             // Seed data on application startup
             using (var serviceScope = app.ApplicationServices.CreateScope())
@@ -75,6 +71,8 @@ namespace GroceryShop.Web
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GroceryShop.Web v1"));
             }
+
+            app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
 
             app.UseHttpsRedirection();
 

@@ -15,9 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GroceryShop.Common\GroceryShop.Common.csproj" />
     <ProjectReference Include="..\GroceryShop.Data\GroceryShop.Data.csproj" />
     <ProjectReference Include="..\GroceryShop.Services.Data\GroceryShop.Services.Data.csproj" />
     <ProjectReference Include="..\GroceryShop.Services.Mapping\GroceryShop.Services.Mapping.csproj" />
+    <ProjectReference Include="..\GroceryShop.Web.Infrastructure\GroceryShop.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\GroceryShop.Web.ViewModels\GroceryShop.Web.ViewModels.csproj" />
   </ItemGroup>
 

@@ -6,6 +6,7 @@
     using System.Reflection;
     using AutoMapper;
     using AutoMapper.Configuration;
+    using GroceryShop.Common;
 
     public static class AutoMapperConfig
     {
@@ -26,7 +27,7 @@
 
             var config = new MapperConfigurationExpression();
             config.CreateProfile(
-                "ReflectionProfile",
+                GlobalConstants.AutoMapperReflectionProfile,
                 configuration =>
                 {
                     // IMapFrom<>

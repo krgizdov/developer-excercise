@@ -1,7 +1,11 @@
 namespace GroceryShop.Web
 {
     using GroceryShop.Data;
+    using GroceryShop.Data.Common.Repositories;
+    using GroceryShop.Data.Repositories;
     using GroceryShop.Data.Seeding;
+    using GroceryShop.Services.Data;
+    using GroceryShop.Services.Mapping;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.HttpsPolicy;
@@ -15,6 +19,7 @@ namespace GroceryShop.Web
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using System.Threading.Tasks;
 
     public class Startup
@@ -38,11 +43,23 @@ namespace GroceryShop.Web
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "GroceryShop.Web", Version = "v1" });
             });
+
+            services.AddSingleton(this.configuration);
+
+            // Data repositories
+            services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
+            services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+
+            // Application services
+            services.AddTransient<IProductsService, ProductsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            AutoMapperConfig.RegisterMappings(Assembly.Load("GroceryShop.Web.ViewModels"));
+
+            // Seed data on application startup
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();

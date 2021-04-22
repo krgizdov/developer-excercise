@@ -5,4 +5,9 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GroceryShop.Data.Models\GroceryShop.Data.Models.csproj" />
+    <ProjectReference Include="..\GroceryShop.Services.Mapping\GroceryShop.Services.Mapping.csproj" />
+  </ItemGroup>
+
 </Project>

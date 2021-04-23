@@ -17,7 +17,7 @@
             this.dealsService = dealsService;
         }
 
-        // GET: api/products
+        // GET: api/deals
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DealViewModel>>> GetDeals(int count = 5)
         {
@@ -26,7 +26,7 @@
             return this.Ok(dealViews);
         }
 
-        // GET api/products/{id}
+        // GET api/deals/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<DealViewModel>> GetDeal(int id)
         {
@@ -35,7 +35,7 @@
             return this.Ok(dealView);
         }
 
-        // POST api/products
+        // POST api/deals
         [HttpPost]
         public async Task<ActionResult<DealViewModel>> PostDealProducts(int id, string[] productNames)
         {

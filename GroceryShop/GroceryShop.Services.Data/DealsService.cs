@@ -26,14 +26,14 @@
         {
             if (productNames.Length == 0)
             {
-                throw new InvalidParameterException(GlobalConstants.InvalidProductAddAmount);
+                throw new InvalidParameterException(GlobalConstants.InvalidProductAmount);
             }
 
             var deal = await this.GetDealAsync(id);
 
             foreach (var productName in productNames)
             {
-                var product = await this.CheckIfProductCanBeAdded(productName, deal);
+                var product = await this.CheckIfProductCanBeAddedAsync(productName, deal);
 
                 deal.Products.Add(new ProductDeal
                 {
@@ -53,7 +53,7 @@
         {
             if (count <= 0 || count > 50)
             {
-                throw new InvalidParameterException(GlobalConstants.InvalidDealCount);
+                throw new InvalidParameterException(GlobalConstants.InvalidQueryCount);
             }
 
             var deals =  await this.dealRepository
@@ -65,23 +65,40 @@
             return deals;
         }
 
+        public async Task<IEnumerable<Deal>> GetAllAsync(int count = 5)
+        {
+            if (count <= 0 || count > 50)
+            {
+                throw new InvalidParameterException(GlobalConstants.InvalidQueryCount);
+            }
+
+            var deals = await this.dealRepository
+                .AllAsNoTracking()
+                .Include(d => d.Products)
+                .ThenInclude(pd => pd.Product)
+                .Take(count)
+                .ToListAsync();
+
+            return deals;
+        }
+
         public async Task<T> GetByIdAsync<T>(int id)
         {
             var deal = await this.dealRepository
                 .AllAsNoTracking()
-                .Where(p => p.Id == id)
+                .Where(d => d.Id == id)
                 .To<T>()
                 .FirstOrDefaultAsync();
 
             if (deal == null)
             {
-                throw new ObjectNotFoundException(string.Format(GlobalConstants.DealWithIdNotFound, id));
+                throw new ObjectNotFoundException(string.Format(GlobalConstants.ObjectWithIdNotFound, nameof(Deal), id));
             }
 
             return deal;
         }
 
-        private async Task<Product> CheckIfProductCanBeAdded(string productName, Deal deal)
+        private async Task<Product> CheckIfProductCanBeAddedAsync(string productName, Deal deal)
         {
             if (string.IsNullOrEmpty(productName) || productName.Length > 50)
             {
@@ -113,7 +130,7 @@
 
             if (deal == null)
             {
-                throw new ObjectNotFoundException(string.Format(GlobalConstants.DealWithIdNotFound, id));
+                throw new ObjectNotFoundException(string.Format(GlobalConstants.ObjectWithIdNotFound, nameof(Deal), id));
             }
 
             return deal;

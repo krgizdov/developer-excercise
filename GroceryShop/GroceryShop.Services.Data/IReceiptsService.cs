@@ -1,17 +1,15 @@
 ﻿namespace GroceryShop.Services.Data
 {
-    using GroceryShop.Data.Models;
+    using GroceryShop.Web.ViewModels.Receipts;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public interface IDealsService
+    public interface IReceiptsService
     {
         Task<IEnumerable<T>> GetAllAsync<T>(int count = 5);
 
-        Task<IEnumerable<Deal>> GetAllAsync(int count = 5);
-
         Task<T> GetByIdAsync<T>(int id);
 
-        Task<T> AddProductsToDealAsync<T>(int id, string[] productNames);
+        Task<ReceiptViewModel> CreateReceiptAsync(string[] scannedProducts);
     }
 }

@@ -24,14 +24,14 @@
         {
             if (inputModels.Length == 0)
             {
-                throw new InvalidParameterException(GlobalConstants.InvalidProductCreateAmount);
+                throw new InvalidParameterException(GlobalConstants.InvalidProductAmount);
             }
 
             var products = new List<Product>();
 
             foreach (var input in inputModels)
             {
-                await this.CheckIfProductCanBeAddedOrUpdated(input.Name, input.Price);
+                await this.CheckIfProductCanBeAddedOrUpdatedAsync(input.Name, input.Price);
 
                 var product = new Product
                 {
@@ -64,7 +64,7 @@
         {
             if (count <= 0 || count > 50)
             {
-                throw new InvalidParameterException(GlobalConstants.InvalidProductCount);
+                throw new InvalidParameterException(GlobalConstants.InvalidQueryCount);
             }
 
             //Get all products ordered by name. Optionally you can get a specified number of products.
@@ -89,7 +89,7 @@
 
             if (product == null)
             {
-                throw new ObjectNotFoundException(string.Format(GlobalConstants.ProductWithIdNotFound, id));
+                throw new ObjectNotFoundException(string.Format(GlobalConstants.ObjectWithIdNotFound, nameof(Product), id));
             }
 
             return product;
@@ -99,7 +99,7 @@
         {
             var product = await this.GetProductAsync(id);
 
-            await this.CheckIfProductCanBeAddedOrUpdated(name, price);
+            await this.CheckIfProductCanBeAddedOrUpdatedAsync(name, price);
 
             product.Name = name;
             product.Price = price;
@@ -125,13 +125,13 @@
 
             if (product == null)
             {
-                throw new ObjectNotFoundException(string.Format(GlobalConstants.ProductWithIdNotFound, id));
+                throw new ObjectNotFoundException(string.Format(GlobalConstants.ObjectWithIdNotFound, nameof(Product), id));
             }
 
             return product;
         }
 
-        private async Task CheckIfProductCanBeAddedOrUpdated(string name, decimal price)
+        private async Task CheckIfProductCanBeAddedOrUpdatedAsync(string name, decimal price)
         {
             if (string.IsNullOrEmpty(name) || name.Length > 50)
             {

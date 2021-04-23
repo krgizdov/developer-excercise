@@ -18,16 +18,14 @@
 
         public const string ApplicationProblemJson = "application/problem+json";
 
-        public const string InvalidProductAddAmount = "Amount of products to add must be at least 1.";
-        public const string InvalidDealCount = "Amount of deals cannot be less than 0 and more than 50.";
-        public const string DealWithIdNotFound = "Deal with id {0} not found.";
+        public const string InvalidQueryCount = "Amount of items to show cannot be less than 0 and more than 50.";
 
-        public const string InvalidProductCreateAmount = "Amount of products to create must be at least 1.";
-        public const string InvalidProductCount = "Amount of products cannot be less than 0 and more than 50.";
+        public const string ObjectWithIdNotFound = "{0} with id {1} not found.";
+
+        public const string InvalidProductAmount = "Amount of products must be at least 1.";
         public const string InvalidProductName = "Product name cannot be null or more than 50 characters long.";
         public const string InvalidProductPrice = "Product price cannot be less than 0.";
         public const string ProductNotFound = "Product {0} not found.";
-        public const string ProductWithIdNotFound = "Product with id {0} not found.";
         public const string ProductAlreadyExists = "Product {0} already exists.";
         public const string ProductAlreadyInDeal = "Product {0} is already in deal.";
     }

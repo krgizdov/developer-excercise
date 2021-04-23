@@ -16,10 +16,10 @@
 
             var products = new List<Product>
             {
-                new Product{ Name = "apple", Price = 0.50m, },
-                new Product{ Name = "banana", Price = 0.40m, },
-                new Product{ Name = "tomato", Price = 0.30m, },
-                new Product{ Name = "potato", Price = 0.26m, }
+                new Product{ Name = "apple", Price = 50, },
+                new Product{ Name = "banana", Price = 40, },
+                new Product{ Name = "tomato", Price = 30, },
+                new Product{ Name = "potato", Price = 26, }
             };
 
             foreach (var product in products)

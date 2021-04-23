@@ -99,7 +99,7 @@
         {
             var product = await this.GetProductAsync(id);
 
-            await this.CheckIfProductCanBeAddedOrUpdatedAsync(name, price);
+            await this.CheckIfProductCanBeAddedOrUpdatedAsync(name, price, id);
 
             product.Name = name;
             product.Price = price;
@@ -131,7 +131,7 @@
             return product;
         }
 
-        private async Task CheckIfProductCanBeAddedOrUpdatedAsync(string name, decimal price)
+        private async Task CheckIfProductCanBeAddedOrUpdatedAsync(string name, decimal price, int id = default)
         {
             if (string.IsNullOrEmpty(name) || name.Length > 50)
             {
@@ -145,7 +145,7 @@
 
             var product = await this.GetByNameAsync(name);
 
-            if (product != null)
+            if (product != null && product.Id != id)
             {
                 throw new ObjectExistsException(string.Format(GlobalConstants.ProductAlreadyExists, name));
             }

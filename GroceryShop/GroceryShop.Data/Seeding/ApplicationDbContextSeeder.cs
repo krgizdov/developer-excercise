@@ -12,9 +12,9 @@
 
             var seeders = new List<ISeeder>
                           {
-                              new ProductsSeeder(),
+                              //new ProductsSeeder(),
                               new DealsSeeder(),
-                              new ProductsDealsSeeder(),
+                              //new ProductsDealsSeeder(),
                           };
 
             foreach (var seeder in seeders)

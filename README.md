@@ -1,70 +1,39 @@
 # Developer Exercise
 
-This exercise is designed to demonstrate a candidate's abilities across a range of competencies in software development (The applicant can pick any language of their preference)
+## Table of Contents
++ [About](#about)
++ [Project Structure](#project_structure)
++ [Idea](#idea)
++ [Getting Started](#getting_started)
++ [Usage](#usage)
 
-## Instructions
+## About <a name = "about"></a>
+This is a Web Api project created as a solution to a developer exercise. The idea of this exercise it to create a Grocery Shop Till which can scan fruits and vegetables of different types and produce a numeric result/bill in the end.
 
-1. Fork the repository
-2. Implement a solution of the `Requirements` (feel free to use any helper packages/frameworks that you think think will be of help)
-3. Share the forked repository
+## Project Structure <a name = "project_structure"></a>
++ Data - Data Access Layer which includes: Data Models, Context class, Repositories and Data seeding.
++ Services - Service Layer which contains the business logic and also mediates communication between a controller and repository.
++ Tests - Test project including testing of our application.
++ Web - API Layer which is the main Application entry point containing: Controllers, View Models, Middlewares, Startup.
++ Common - Project which cointains commonly shared resources like global constants.
 
-## "Business" Requirements
+## Idea <a name = "idea"></a>
++ As we can see the project is divided into 3 main parts: Data Access Layer, Service Layer and API Layer.
++ Having implemented the Generic Repository Pattern we create a cleaner solution and seperation of concerns where the Application does not communicate directly with the Data Layer and it also makes it easier to test our code. Controllers are responsible for application flow control logic and the repository is responsible for data access logic. In a situation where we have a lot of models it would be too much if we have to implement a repository for each model, so the generic repository also reduces the amount of code we have to write and thus the possibility of error.
++ The Service Layer is an additional layer that mediates communication between a controller and repository layer. It contains business logic and also our validation logic. 
++ The application uses AutoMapper for object mapping. AutoMapper helps us when we need to flatten complex objects and removes the need to manually map objects. Another good feature is that it works with IQueryable and helps generate optimized SELECT SQL queries.
++ A custom exception handling middleware is implemented in the application. This helps us handle errors throughout our application with the opportunity to create and return our own response depending on what the error is.
++ Swagger is also integrated and it generates for us an easy to use, interactive Api documentation. It makes it easier to test and develop our application.
 
-- Create a basic Groceries Shop till which can `scan` fruits and vegetables of different types, producing a numeric result/bill in the end. Assume the currency is called `aws` and there is `100 cloud ('c' for short)` in 1 aws
-- Apart from simply adding the value of each product, the till should contain logic for the following special deals:
-  - `2 for 3` - for a given selection of items (customer buys 3 items but only pays for the value of 2 of them, the cheapest one is free). In case there are more than 3 items that are included in the `2 for 3` deal, the first 3 items are included.
-    Example Deal ["banana", "orange", "tomato"], example items scanned ["banana", "orange", "orange", "tomato"] - the tomato is not included in the discount (the cheaper of `banana` or `orange` will be subtracted)
-  - `buy 1 get 1 half price` - for a given selection of items (if the customer buys a given product under such offer, they receive a 50% reduction in the price of a second item of the same type)
-- The till should be `programmable` so that whoever runs it can define 2 inputs:
-  - The list of items supported by the till - each item with a given "price", "name"
-  - Once a new item is added to the till, the administrator should be able to add it to any of the 2 special deals defined above
-  - You should be able to scan a list of items and see the end price (any special deal discounts should be subtracted)
+## Getting Started <a name = "getting_started"></a>
+To get a copy of the project up and running on your local machine the only requirement is to change the ConnectionString in you appsettings.json.
 
-### Example:
-
-Input groceries:
-
-| Product | Price |
-| ------- | :---: |
-| apple   |  50c  |
-| banana  |  40c  |
-| tomato  |  30c  |
-| potato  |  26c  |
-
-Input deals:
-
-- `2 for 3` - ["apple", "banana", "tomato"]
-- `buy 1 get 1 half price` - potato
-
-Example scanned customer basket: "apple", "banana", "banana", "potato", "tomato", "banana", "potato"
-
-Expected Output: `1 aws and 99 clouds`
-Explanation:
-
-The items are processed(Scanned) in order:
-
-- "apple", "banana", "banana" are picked up for the `2 for 3` deal and 1 of the bananas is free - total cost `90c`
-
-- "potato", "tomato", "banana", "potato" are left. There is a `buy 1 get 1 half price` for potatoes, meaning the second potato will be half price (13c) so it will be `39c` for both
-
-- The other 2 items scanned `tomato` and `banana` are not part of any deals so they are charged their basic price `70c` total
-
-The total amount the is equal to: `90c + 39c + 70c = 1 aws and 99 clouds` (199 clouds = 1.99 aws)
-
-## Grading
-
-You will be scored on the following:
-
-- Code cleanliness and ease of understandability
-- Code tests
-- Code reusability
-- Code modularity (i.e. ease of extension)
-- Documentation
-
-## Demonstrable concepts
-
-You are free to make your solution to this exercise as simple or as complicated as you want based off the above criteria. The end result can come in the for of either of the options below:
-
-- REST/HTTP API
-- User interface (web app)
-- Application CLI
+## Usage <a name = "usage"></a>
+1. The project uses Swagger which upon running generates an Api documentation with a very user friendly interface which shows a list of all controllers defined in our application and provides an easy way to send requests to our API.
+2. In our case we have: Deals, Products and Receipts.
+3. Initially the project seeds the 2 main deals: `2 for 3` and `buy 1 get 1 half price`.
+4. Each controller has the functionality to list a certain amount of objects and get an object by id. For the products we have all CRUD operations supported.
+5. Each action has validation to ensure correct input. In case of incorrect input a Client Error response will be returned with information about the error.
+6. We first need to create products by sending a POST request to api/products. We can create one or more products. The product object has a name and a price. If we have "price": 50 that means 50 clouds, for "price": 150 we have 1 aws and 50 clouds.
+7. Then if we want to add a product to a specific deal we must send a POST request to api/deals/{id}. Again here we can add one or more products.
+8. Finally if we want to make a purchase we have to send a POST request to api/receipts with the names of all products we would wish to buy. The response is a receipt object which gives us information about the total price, discount, total price with discount and all products bought.

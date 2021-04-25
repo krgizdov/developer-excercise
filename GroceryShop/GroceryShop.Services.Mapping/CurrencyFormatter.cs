@@ -10,7 +10,7 @@
             }
             else
             {
-                return $"{(int)number / 100} aws{(number % 100 == 0 ? string.Empty : $" {(int)number % 100} clouds")}";
+                return $"{(int)number / 100} aws{(number % 100 == 0 ? string.Empty : $" and {(int)number % 100} clouds")}";
             }
         }
     }

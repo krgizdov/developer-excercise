@@ -35,8 +35,8 @@
             return this.Ok(dealView);
         }
 
-        // POST api/deals
-        [HttpPost]
+        // POST api/deals/{id}
+        [HttpPost("{id}")]
         public async Task<ActionResult<DealViewModel>> PostDealProducts(int id, string[] productNames)
         {
             var dealView = await this.dealsService.AddProductsToDealAsync<DealViewModel>(id, productNames);

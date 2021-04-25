@@ -37,7 +37,7 @@
 
         // POST api/receipts
         [HttpPost]
-        public async Task<ActionResult<object>> PostReceipt(string[] scannedProducts)
+        public async Task<ActionResult<ReceiptViewModel>> PostReceipt(string[] scannedProducts)
         {
             var receiptView = await this.receiptsService.CreateReceiptAsync(scannedProducts);
 
